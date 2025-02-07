@@ -1,6 +1,5 @@
-local gameid = game.PlaceId
-if(gameid== 5293755937) then
-print("local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+if game.PlaceId == 5293755937 then
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
    Name = "Speed Run Simulator ⚡",
    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
@@ -133,7 +132,6 @@ while wait() do
 game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Rebirth"):FireServer()
 end
    end,
-})")
-else
-print("place invalid")
+})
+loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/BladeBallScriptMadeBySudaisXCheatsMain/refs/heads/main/BladeBallOpScriptbysudais"))()
 end
