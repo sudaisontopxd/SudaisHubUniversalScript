@@ -1,6 +1,5 @@
 If game.PlaceId == 5293755937 then
 loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/SpeedRunSimulatorByCheats/refs/heads/main/SpeedRumSimulator"))()
-end
 elseif game.PlaceId == 13772394625
 loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/BladeBallScriptMadeBySudaisXCheatsMain/refs/heads/main/BladeBallOpScriptbysudais"))()
 end
