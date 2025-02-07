@@ -133,5 +133,4 @@ game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Rebir
 end
    end,
 })
-loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/BladeBallScriptMadeBySudaisXCheatsMain/refs/heads/main/BladeBallOpScriptbysudais"))()
 end
