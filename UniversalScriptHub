@@ -1,4 +1,4 @@
-If Game.placeid == 5293755937 then
+If game.placeid == 5293755937 then
 loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/SpeedRunSimulatorByCheats/refs/heads/main/SpeedRumSimulator"))()
 end
 elseif game.PlaceId == 13772394625
