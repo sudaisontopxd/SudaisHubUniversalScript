@@ -1,4 +1,3 @@
-if game.PlaceId == 13772394625 then
 loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/BladeBallScriptMadeBySudaisXCheatsMain/refs/heads/main/BladeBallOpScriptbysudais"))()
 if game.PlaceId == 5293755937 then
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
@@ -135,5 +134,4 @@ game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Rebir
 end
    end,
 })
-
 end
