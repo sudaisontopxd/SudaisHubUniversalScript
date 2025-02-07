@@ -133,4 +133,6 @@ game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Rebir
 end
    end,
 })
+elseif game.PlaceId == 13772394625
+loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/BladeBallScriptMadeBySudaisXCheatsMain/refs/heads/main/BladeBallOpScriptbysudais"))()
 end
