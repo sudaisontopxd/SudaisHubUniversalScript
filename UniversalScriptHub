@@ -115,4 +115,3 @@ end
         TextBox.Text = ""
     end
 end)
-if game.PlaceId == 5293755937 then
