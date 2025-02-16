@@ -110,6 +110,8 @@ elseif game.PlaceId == 3214114884 then
 loadstring(game:HttpGet('https://raw.githubusercontent.com/sudaisontopxd/FlagWarsScript/refs/heads/main/madeBySudais'))()
 elseif game.PlaceId == 13772394625 then
 loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/BladeBallScriptMadeBySudaisXCheatsMain/refs/heads/main/BladeBallOpScriptbysudais"))()
+else
+  game:GetService("Players").LocalPlayer:kick("Fuck u get in a supported game bitch")
 end
     else
         TextBox.PlaceholderText = "Paste A Valid Key Bitch"
