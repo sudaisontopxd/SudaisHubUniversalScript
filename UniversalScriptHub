@@ -104,7 +104,8 @@ CheckKey.MouseButton1Click:Connect(function()
 
 -- Put Your Script Here
 loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/BladeBallScriptMadeBySudaisXCheatsMain/refs/heads/main/BladeBallOpScriptbysudais"))()
-    else
+end
+else
         TextBox.PlaceholderText = "Paste A Valid Key Bitch"
         TextBox.Text = ""
         wait(1)
@@ -217,7 +218,8 @@ CheckKey.MouseButton1Click:Connect(function()
         wait(1)
         ScreenGui:Destroy()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/SpeedRunSimulatorByCheats/refs/heads/main/SpeedRumSimulator"))()
-  else
+end
+else
         TextBox.PlaceholderText = "Paste A Valid Key Bitch"
         TextBox.Text = ""
         wait(1)
@@ -331,8 +333,8 @@ CheckKey.MouseButton1Click:Connect(function()
 
 -- Put Your Script Here
 loadstring(game:HttpGet('https://raw.githubusercontent.com/sudaisontopxd/FlagWarsScript/refs/heads/main/madeBySudais'))()
-
-    else
+end
+else
         TextBox.PlaceholderText = "Paste A Valid Key Bitch"
         TextBox.Text = ""
         wait(1)
