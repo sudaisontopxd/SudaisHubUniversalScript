@@ -108,9 +108,6 @@ elseif game.PlaceId == 5293755937 then
 loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/SpeedRunSimulatorByCheats/refs/heads/main/SpeedRumSimulator"))()
 elseif game.PlaceId == 3214114884 then
 loadstring(game:HttpGet('https://raw.githubusercontent.com/sudaisontopxd/FlagWarsScript/refs/heads/main/madeBySudais'))()
-else
-  game:GetService("PLayers").LocalPlayer:kick("fuck u get in a supported game bitch")
-end
     else
         TextBox.PlaceholderText = "Paste A Valid Key Bitch"
         TextBox.Text = ""
