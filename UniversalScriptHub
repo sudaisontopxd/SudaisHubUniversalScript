@@ -108,6 +108,8 @@ elseif game.PlaceId == 5293755937 then
 loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/SpeedRunSimulatorByCheats/refs/heads/main/SpeedRumSimulator"))()
 elseif game.PlaceId == 3214114884 then
 loadstring(game:HttpGet('https://raw.githubusercontent.com/sudaisontopxd/FlagWarsScript/refs/heads/main/madeBySudais'))()
+elseif game.PlaceId == 13772394625 then
+loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/BladeBallScriptMadeBySudaisXCheatsMain/refs/heads/main/BladeBallOpScriptbysudais"))()
 end
     else
         TextBox.PlaceholderText = "Paste A Valid Key Bitch"
