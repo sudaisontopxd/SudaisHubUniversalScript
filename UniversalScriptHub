@@ -90,7 +90,7 @@ GetKey.MouseButton1Click:Connect(function()
 end)
 
 local function validateKey(key)
-    return key == "Egh$Ifsxc#4" -- Replace this with your key
+    return key == "eHcxB$-#5" -- Replace this with your key
 end
 
 CheckKey.MouseButton1Click:Connect(function()
