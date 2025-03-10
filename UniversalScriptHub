@@ -114,7 +114,7 @@ else
     game:GetService("Players").LocalPlayer:Kick("fuck u bitch get in a supported game")
 end
 else
-        TextBox.PlaceholderText = "Paste A Valid Key Bitch"
+        TextBox.PlaceholderText = "The Key Is Expired Or Incorrect Click Get Key To Get  A New Key"
         TextBox.Text = ""
         wait(1)
         TextBox.PlaceholderText = "Enter Key..."
