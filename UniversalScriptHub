@@ -86,11 +86,11 @@ CheckKeyCorner.CornerRadius = UDim.new(0, 5)
 CheckKeyCorner.Parent = CheckKey
 
 GetKey.MouseButton1Click:Connect(function()
-   setclipboard("https://just2earn.com/KeyScript")
+   setclipboard("https://just2earn.com/KeyScript2")
 end)
 
 local function validateKey(key)
-    return key == "eHcxB$-#5" -- Replace this with your key
+    return key == "uNk24a6Cmc#6" -- Replace this with your key
 end
 
 CheckKey.MouseButton1Click:Connect(function()
