@@ -96,9 +96,9 @@ end
 CheckKey.MouseButton1Click:Connect(function()
     local enteredKey = TextBox.Text
     if validateKey(enteredKey) then
-        TextBox.PlaceholderText = "Correct Key!"
+        TextBox.PlaceholderText = "Correct Key!Script Loading WAIT"
         TextBox.Text = ""
-        wait(1)
+        wait(3)
         ScreenGui:Destroy()
 
 -- Put Your Script Here
@@ -111,7 +111,7 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/sudaisontopxd/FlagWar
 elseif game.PlaceId == 13772394625 then
 loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/BladeBallScriptMadeBySudaisXCheatsMain/refs/heads/main/BladeBallOpScriptbysudais"))()
 elseif game.PlaceId == 17262329365 then
-
+loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/X500-CLICKS-Mega-Clickers/refs/heads/main/MegaCLickersSXC"))()
 else
     game:GetService("Players").LocalPlayer:Kick("fuck u bitch get in a supported game")
 end
@@ -123,6 +123,5 @@ else
         TextBox.Text = ""
     end
 end)
-
 
 
