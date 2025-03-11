@@ -110,6 +110,8 @@ elseif game.PlaceId == 3214114884 then
 loadstring(game:HttpGet('https://raw.githubusercontent.com/sudaisontopxd/FlagWarsScript/refs/heads/main/madeBySudais'))()
 elseif game.PlaceId == 13772394625 then
 loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/BladeBallScriptMadeBySudaisXCheatsMain/refs/heads/main/BladeBallOpScriptbysudais"))()
+elseif game.PlaceId == 17262329365 then
+
 else
     game:GetService("Players").LocalPlayer:Kick("fuck u bitch get in a supported game")
 end
