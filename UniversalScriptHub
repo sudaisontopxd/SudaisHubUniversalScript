@@ -86,11 +86,11 @@ CheckKeyCorner.CornerRadius = UDim.new(0, 5)
 CheckKeyCorner.Parent = CheckKey
 
 GetKey.MouseButton1Click:Connect(function()
-   setclipboard("https://just2earn.com/KeyScript2")
+   setclipboard("https://just2earn.com/KeyScript3")
 end)
 
 local function validateKey(key)
-    return key == "uNk24a6Cmc#6" -- Replace this with your key
+    return key == "QGqd3Ac9za#7" -- Replace this with your key
 end
 
 CheckKey.MouseButton1Click:Connect(function()
@@ -116,7 +116,7 @@ else
     game:GetService("Players").LocalPlayer:Kick("fuck u bitch get in a supported game")
 end
 else
-        TextBox.PlaceholderText = "The Key Is Expired Or Incorrect Click Get Key To Get  A New Key"
+        TextBox.PlaceholderText = "Key Is Expired Get A New Key"
         TextBox.Text = ""
         wait(1)
         TextBox.PlaceholderText = "Enter Key..."
