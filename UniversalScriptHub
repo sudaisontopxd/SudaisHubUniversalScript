@@ -1,3 +1,6 @@
+local Players = game:GetService("Players")
+setclipboard("https://dsc.gg/get-sudais-x-cheats")
+
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
@@ -86,11 +89,11 @@ CheckKeyCorner.CornerRadius = UDim.new(0, 5)
 CheckKeyCorner.Parent = CheckKey
 
 GetKey.MouseButton1Click:Connect(function()
-   setclipboard("https://just2earn.com/KeyScript3")
+   setclipboard("https://just2earn.com/KeyScript4")
 end)
 
 local function validateKey(key)
-    return key == "QGqd3Ac9za#7" -- Replace this with your key
+    return key == "4PA1Spq8an#8" -- Replace this with your key
 end
 
 CheckKey.MouseButton1Click:Connect(function()
@@ -113,7 +116,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/BladeBa
 elseif game.PlaceId == 17262329365 then
 loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/X500-CLICKS-Mega-Clickers/refs/heads/main/MegaCLickersSXC"))()
 else
-    game:GetService("Players").LocalPlayer:Kick("fuck u bitch get in a supported game")
+    game:GetService("Players").LocalPlayer:Kick("get in a supported game")
 end
 else
         TextBox.PlaceholderText = "Key Is Expired Get A New Key"
