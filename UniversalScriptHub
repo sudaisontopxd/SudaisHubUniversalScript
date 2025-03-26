@@ -89,7 +89,7 @@ CheckKeyCorner.CornerRadius = UDim.new(0, 5)
 CheckKeyCorner.Parent = CheckKey
 
 GetKey.MouseButton1Click:Connect(function()
-   setclipboard("sites.google.com/view/sudais-hub-key/sudais-hub")
+   setclipboard("https://v0-new-project-lhfy94jrs9n.vercel.app/")
 end)
 
 local function validateKey(key)
