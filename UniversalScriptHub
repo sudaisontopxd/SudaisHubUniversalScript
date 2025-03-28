@@ -1,110 +1,17 @@
 local Players = game:GetService("Players")
 setclipboard("https://dsc.gg/get-sudais-x-cheats")
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+local loadedkey = loadstring(game:HttpGet('https://raw.githubusercontent.com/sudaisontopxd/keyscript/refs/heads/main/keyscriptuniversalhub'))()
 
-local Frame = Instance.new("Frame")
-Frame.Size = UDim2.new(0, 400, 0, 300)
-Frame.Position = UDim2.new(0.5, 0, 0.5, 0)
-Frame.AnchorPoint = Vector2.new(0.5, 0.5)
-Frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-Frame.BorderSizePixel = 0
-Frame.Active = true
-Frame.Draggable = true
-Frame.Parent = ScreenGui
 
-local FrameCorner = Instance.new("UICorner")
-FrameCorner.CornerRadius = UDim.new(0, 10)
-FrameCorner.Parent = Frame
 
-local Close = Instance.new("TextButton")
-Close.Size = UDim2.new(0, 40, 0, 40)
-Close.Position = UDim2.new(1, -40, 0, 0)
-Close.BackgroundTransparency = 1
-Close.Text = "×"
-Close.TextScaled = true
-Close.TextColor3 = Color3.fromRGB(150, 150, 150)
-Close.Parent = Frame
-Close.MouseButton1Click:Connect(function()
-   ScreenGui:Destroy()
-end)
 
-local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, 0, 0, 30)
-Title.Position = UDim2.new(0, 0, 0.05, 0)
-Title.Text = "Key For SUDAISHUB"
-Title.TextSize = 18
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.BackgroundTransparency = 1
-Title.Parent = Frame
 
-local Instructions = Instance.new("TextLabel")
-Instructions.Size = UDim2.new(1, 0, 0, 30)
-Instructions.Position = UDim2.new(0, 0, 0.2, 0)
-Instructions.Text = "Enter Key To Access The Script"
-Instructions.TextSize = 13
-Instructions.TextColor3 = Color3.fromRGB(150, 150, 150)
-Instructions.BackgroundTransparency = 1
-Instructions.Parent = Frame
+getgenv().inputkey = ""
 
-local TextBox = Instance.new("TextBox")
-TextBox.Size = UDim2.new(0.8, 0, 0.2, 0)
-TextBox.Position = UDim2.new(0.1, 0, 0.4, 0)
-TextBox.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-TextBox.PlaceholderText = "Enter Key..."
-TextBox.Text = ""
-TextBox.TextSize = 18
-TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextBox.Parent = Frame
 
-local TextBoxCorner = Instance.new("UICorner")
-TextBoxCorner.CornerRadius = UDim.new(0, 5)
-TextBoxCorner.Parent = TextBox
-
-local GetKey = Instance.new("TextButton")
-GetKey.Size = UDim2.new(0.35, 0, 0.15, 0)
-GetKey.Position = UDim2.new(0.1, 0, 0.7, 0)
-GetKey.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-GetKey.Text = "Get Key"
-GetKey.TextSize = 18
-GetKey.TextColor3 = Color3.fromRGB(150, 150, 150)
-GetKey.Parent = Frame
-
-local GetKeyCorner = Instance.new("UICorner")
-GetKeyCorner.CornerRadius = UDim.new(0, 5)
-GetKeyCorner.Parent = GetKey
-
-local CheckKey = Instance.new("TextButton")
-CheckKey.Size = UDim2.new(0.35, 0, 0.15, 0)
-CheckKey.Position = UDim2.new(0.55, 0, 0.7, 0)
-CheckKey.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-CheckKey.Text = "Check Key"
-CheckKey.TextSize = 18
-CheckKey.TextColor3 = Color3.fromRGB(150, 150, 150)
-CheckKey.Parent = Frame
-
-local CheckKeyCorner = Instance.new("UICorner")
-CheckKeyCorner.CornerRadius = UDim.new(0, 5)
-CheckKeyCorner.Parent = CheckKey
-
-GetKey.MouseButton1Click:Connect(function()
-   setclipboard("https://v0-new-project-lhfy94jrs9n.vercel.app/")
-end)
-
-local function validateKey(key)
-    return key == "4PA1Spq8an#8" -- Replace this with your key
-end
-
-CheckKey.MouseButton1Click:Connect(function()
-    local enteredKey = TextBox.Text
-    if validateKey(enteredKey) then
-        TextBox.PlaceholderText = "Correct Key!Script Loading WAIT"
-        TextBox.Text = ""
-        wait(3)
-        ScreenGui:Destroy()
-
--- Put Your Script Here
+function LoadMain()
 if game.PlaceId == 13772394625 then
 loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/BladeBallScriptMadeBySudaisXCheatsMain/refs/heads/main/BladeBallOpScriptbysudais"))()
 elseif game.PlaceId == 5293755937 then
@@ -116,15 +23,105 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/BladeBa
 elseif game.PlaceId == 17262329365 then
 loadstring(game:HttpGet("https://raw.githubusercontent.com/sudaisontopxd/X500-CLICKS-Mega-Clickers/refs/heads/main/MegaCLickersSXC"))()
 else
-    game:GetService("Players").LocalPlayer:Kick("get in a supported game")
+    game:GetService("Players").LocalPlayer:Kick("Get In A Script Supported Game")
 end
-else
-        TextBox.PlaceholderText = "Key Is Expired Get A New Key"
-        TextBox.Text = ""
-        wait(1)
-        TextBox.PlaceholderText = "Enter Key..."
-        TextBox.Text = ""
-    end
-end)
+end
 
+
+
+
+function readkey()
+   if readfile("/SudaisKey/UniversalHub.txt") == loadedkey then
+       Rayfield:Notify({
+   Title = "Key is Correct",
+   Content = "Script Is Loading",
+   Duration = 6.5,
+   Image = 4483362458,
+})
+       LoadMain()
+    else
+        local Window = Rayfield:CreateWindow({
+   Name = "key System",
+   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "UniversalHub",
+   LoadingSubtitle = "by Sudais",
+   Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil, -- Create a custom folder for your hub/game
+      FileName = "Big Hub"
+   },
+
+   Discord = {
+      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
+      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
+
+   KeySystem = false, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Untitled",
+      Subtitle = "Key System",
+      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
+      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
+local keyTab = Window:CreateTab("Main", 4483362458) -- Title, Image     
+local Input = keyTab:CreateInput({
+   Name = "Enter Key",
+   CurrentValue = "",
+   PlaceholderText = "Paste A Valid Key",
+   RemoveTextAfterFocusLost = false,
+   Flag = "Input1",
+   Callback = function(Text)
+       getgenv().inputkey = Text
+   end,
+})
+local Button = keyTab:CreateButton({
+   Name = "Get Key",
+   Callback = function()
+setclipboard("https://v0-new-project-lhfy94jrs9n.vercel.app/")
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Button = keyTab:CreateButton({
+   Name = "Sumbit Key",
+   Callback = function()
+       if getgenv().inputkey == loadedkey then
+           writefile("/SudaisKey/UniversalHub.txt", loadedkey)
+           Rayfield:Destroy()
+           LoadMain()
+           else
+               Rayfield:Notify({
+   Title = "Not A Valid Key",
+   Content = "The Key Is Expired Or Valid Get A New Key",
+   Duration = 10,
+   Image = 4483362458,
+})
+        end   
+   -- The function that takes place when the button is pressed
+   end,
+})      
+     end
+end
+
+if isfolder("/SudaisKey") then
+    if isfile("/SudaisKey/UniversalHub.txt", "") then
+        readkey()
+    else
+        writefile("/SudaisKey/UniversalHub.txt", "")
+        readkey()
+    end
+else
+    makefolder("SudaisKey")
+    writefile("/SudaisKey/UniversalHub.txt/", "")
+    readkey()
+end
 
