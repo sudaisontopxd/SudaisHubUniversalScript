@@ -1,0 +1,1160 @@
+-- Initialize WindUI Library
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+--local WindUI = loadstring(readfile("WindUI/version-time-12.06.lua"))() -- For local testing if needed
+
+function gradient(text, startColor, endColor)
+    local result = ""
+    local length = #text
+
+    for i = 1, length do
+        local t = (i - 1) / math.max(length - 1, 1)
+        local r = math.floor((startColor.R + (endColor.R - startColor.R) * t) * 255)
+        local g = math.floor((startColor.G + (endColor.G - startColor.G) * t) * 255)
+        local b = math.floor((startColor.B + (endColor.B - startColor.B) * t) * 255)
+
+        local char = text:sub(i, i)
+        result = result .. "<font color=\"rgb(" .. r ..", " .. g .. ", " .. b .. ")\">" .. char .. "</font>"
+    end
+
+    return result
+end
+
+local Confirmed = false
+
+WindUI:Popup({
+    Title = "Welcome! PhantomFlux",
+    Icon = "rbxassetid://129260712070622",
+    IconThemed = true,
+    Content = "This UI combines **PhantomFlux** features with the " .. gradient("WindUI", Color3.fromHex("#00FF87"), Color3.fromHex("#60EFFF")) .. " Library.",
+    Buttons = {
+        {
+            Title = "Cancel",
+            Callback = function() end,
+            Variant = "Secondary",
+        },
+        {
+            Title = "Continue",
+            Icon = "arrow-right",
+            Callback = function() Confirmed = true end,
+            Variant = "Primary",
+        }
+    }
+})
+
+repeat task.wait() until Confirmed
+
+local Window = WindUI:CreateWindow({
+    Title = "PhantomFlux | Sudais X PanScript",
+    Icon = "rbxassetid://129260712070622",
+    IconThemed = true,
+    Author = "Sudais And Pan",
+    Folder = "PhantomFlux", -- Changed folder name to match
+    Size = UDim2.fromOffset(580, 460),
+    Transparent = true,
+    Theme = "Dark",
+    User = {
+        Enabled = true,
+        Callback = function() print("User button clicked!") end,
+        Anonymous = true
+    },
+    SideBarWidth = 200,
+    ScrollBarEnabled = true,
+    KeySystem = false, -- Original script had this as false, so keeping it
+})
+
+-- Custom Topbar Buttons (from WindUI example, can be adjusted)
+Window:CreateTopbarButton("MyCustomButton1", "bird", function() print("clicked 1!") end, 990)
+Window:CreateTopbarButton("MyCustomButton2", "droplet-off", function() print("clicked 2!") end, 989)
+Window:CreateTopbarButton("MyCustomButton3", "battery-plus", function() print("clicked 3!!") end, 988)
+
+Window:EditOpenButton({
+    Title = "Open PhantomFlux UI",
+    Icon = "monitor",
+    CornerRadius = UDim.new(0,16),
+    StrokeThickness = 2,
+    Color = ColorSequence.new( -- gradient
+        Color3.fromHex("FF0F7B"),
+        Color3.fromHex("F89B29")
+    ),
+    Draggable = true,
+})
+
+-- Define Tabs for your script
+local Tabs = {
+    AboutTab = Window:Tab({ Title = "🧾About Us🧾", Icon = "info" }),
+    FarmTab = Window:Tab({ Title = "🌾Farm🌾", Icon = "leaf" }),
+    VisualTab = Window:Tab({ Title = "👁Visual👁", Icon = "eye" }),
+    --- Tabs below this point were removed based on your request ---
+    divider1 = Window:Divider(),
+    WindowTab = Window:Tab({
+        Title = "Window and File Configuration",
+        Icon = "settings",
+        Desc = "Manage window settings and file configurations.",
+        ShowTabTitle = true
+    }),
+    CreateThemeTab = Window:Tab({ Title = "Create Theme", Icon = "palette", Desc = "Design and apply custom themes." }),
+    be = Window:Divider(),
+    LongTab = Window:Tab({
+        Title = "Long and empty tab. with custom icon",
+        Icon = "rbxassetid://129260712070622",
+        IconThemed = true,
+        Desc = "Long Description"
+    }),
+    LockedTab = Window:Tab({ Title = "Locked Tab", Icon = "lock", Desc = "This tab is locked", Locked = true }),
+    TabWithoutIcon = Window:Tab({ Title = "Tab Without icon", ShowTabTitle = true }),
+    Tests = Window:Tab({ Title = "Tests", Icon = "https://raw.githubusercontent.com/Footagesus/WindUI/main/docs/ui.png", ShowTabTitle = true }),
+    ConfigTab = Window:Tab({ Title = "Config", Icon = "file-cog" }),
+}
+
+Window:SelectTab(1) -- Select the first tab by default (About Us)
+
+---
+--- ## 🧾 About Us Tab (Adapted from Rayfield)
+---
+Tabs.AboutTab:Paragraph({
+    Title = "Who Are We?",
+    Icon = "user-circle",
+    Desc = "PanScript is a script showcaser and very creative. Sudais is a Luau & C# dev. He makes scripts."
+})
+
+Tabs.AboutTab:Paragraph({
+    Title = "Discord Invites",
+    Icon = "discord",
+    Desc = "Join our communities for updates and support!"
+})
+
+Tabs.AboutTab:Button({
+    Title = "Sudais X Cheats Discord Link (Click to Copy)",
+    Icon = "link",
+    Callback = function()
+        setclipboard("https://discord.gg/yzuWzSpCg7")
+        WindUI:Notify({Title = "Copied!", Content = "Sudais X Cheats Discord link copied!", Duration = 3})
+    end,
+})
+
+Tabs.AboutTab:Button({
+    Title = "PanScripts Discord Link (Click to Copy)",
+    Icon = "link",
+    Callback = function()
+        setclipboard("https://discord.gg/fBGYXMJXKw")
+        WindUI:Notify({Title = "Copied!", Content = "PanScripts Discord link copied!", Duration = 3})
+    end,
+})
+
+---
+--- ## 🌾Farm Tab (Adapted from Rayfield)
+---
+-- Farm System Variables
+local autoPlant = false
+local plantTask = nil
+local currentSeedOption = "Carrot Seed"
+local plantedPositions = {} -- stores Vector3 positions of already spawned plants to avoid clustering
+
+local autoHarvest = false
+local harvestTask = nil
+
+local AutoSell = false
+local SellThreshold = 15
+local IsSelling = false
+local inputAmount = nil -- For Sheckles amount input
+
+-- Game Services and Player Variables
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local workspace = game:GetService("Workspace")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local GameEvents = ReplicatedStorage:WaitForChild("GameEvents")
+local Farms = workspace:WaitForChild("Farm")
+local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local backpack = LocalPlayer:WaitForChild("Backpack")
+local Sheckles = LocalPlayer:WaitForChild("leaderstats"):WaitForChild("Sheckles")
+local RunService = game:GetService("RunService")
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local PetAssets = ReplicatedStorage:WaitForChild("Assets"):WaitForChild("Models"):WaitForChild("PetAssets")
+local SeedModels = ReplicatedStorage:FindFirstChild("Seed_Models")
+
+
+---
+### Farm Functions
+---
+-- Fire plant remote
+local function fireServer_Plant(position, cropName)
+    local remote = GameEvents:WaitForChild("Plant_RE")
+    remote:FireServer(position, cropName)
+end
+
+-- Find the player's farm model
+local function GetMyFarm()
+    for _, farm in pairs(Farms:GetChildren()) do
+        local important = farm:FindFirstChild("Important")
+        if important and important:FindFirstChild("Data") then
+            local owner = important.Data:FindFirstChild("Owner")
+            if owner and owner.Value == LocalPlayer.Name then
+                return farm
+            end
+        end
+    end
+end
+
+-- Check if a plant can be harvested (has enabled proximity prompt)
+local function CanHarvest(plant)
+    local prompt = plant:FindFirstChildWhichIsA("ProximityPrompt", true)
+    return prompt and prompt.Enabled
+end
+
+-- Trigger the proximity prompt to harvest
+local function HarvestPlant(plant)
+    local prompt = plant:FindFirstChildWhichIsA("ProximityPrompt", true)
+    if prompt then
+        fireproximityprompt(prompt)
+    end
+end
+
+-- Auto Harvest Logic
+local function StartAutoHarvest()
+    harvestTask = task.spawn(function()
+        while autoHarvest do
+            local myFarm = GetMyFarm()
+            if myFarm then
+                local important = myFarm:FindFirstChild("Important")
+                if important then
+                    local plantsPhysical = important:FindFirstChild("Plants_Physical")
+                    if plantsPhysical then
+                        for _, plant in pairs(plantsPhysical:GetChildren()) do
+                            if CanHarvest(plant) then
+                                HarvestPlant(plant)
+                                task.wait()
+                            end
+                        end
+                    end
+                end
+            end
+            task.wait()
+        end
+    end)
+end
+
+local function SetAutoHarvest(enabled)
+    autoHarvest = enabled
+    if autoHarvest then
+        if harvestTask then
+            task.cancel(harvestTask) -- Ensure existing task is cancelled
+        end
+        StartAutoHarvest()
+    else
+        if harvestTask then
+            task.cancel(harvestTask)
+            harvestTask = nil
+        end
+    end
+end
+
+-- Sell System
+local function SellInventory()
+    if IsSelling then return end
+    IsSelling = true
+    local prev = Character:GetPivot()
+    local prevSheckles = Sheckles.Value
+    Character:PivotTo(CFrame.new(62, 4, -26)) -- Teleport to sell spot
+    while task.wait() do
+        if Sheckles.Value ~= prevSheckles then break end
+        GameEvents.Sell_Inventory:FireServer()
+    end
+    Character:PivotTo(prev) -- Teleport back
+    task.wait(0.2) -- Add a small delay for character to settle
+    IsSelling = false
+end
+
+local function GetCropCount()
+    local count = 0
+    local character = LocalPlayer.Character
+    local backpack = LocalPlayer:FindFirstChild("Backpack")
+    if not character or not backpack then return 0 end
+
+    for _, inv in ipairs({character, backpack}) do
+        for _, item in ipairs(inv:GetChildren()) do
+            if item:IsA("Tool") and item:FindFirstChild("Item_String") then
+                count += 1
+            end
+        end
+    end
+    return count
+end
+
+-- Fixed Auto-Sell Loop
+task.spawn(function()
+    repeat task.wait() until LocalPlayer.Character and LocalPlayer:FindFirstChild("Backpack")
+    while task.wait(1) do
+        if AutoSell and GetCropCount() >= SellThreshold then
+            SellInventory()
+        end
+    end
+end)
+
+local function isPositionFarFromOthers(pos, minDistance)
+    for _, existingPos in pairs(plantedPositions) do
+        if (existingPos - pos).Magnitude < minDistance then
+            return false
+        end
+    end
+    return true
+end
+
+-- Returns a random position within ±15 studs around the basePos
+local function getRandomOffsetPosition(basePos)
+    local offsetX = (math.random() * 30) - 15
+    local offsetZ = (math.random() * 30) - 15
+    local newPos = Vector3.new(basePos.X + offsetX, basePos.Y, basePos.Z + offsetZ)
+    return newPos
+end
+
+local function startAutoPlanting(cropName)
+    if plantTask then
+        task.cancel(plantTask)
+        plantTask = nil
+    end
+    plantedPositions = {} -- Reset planted positions when starting new auto-plant
+
+    plantTask = task.spawn(function()
+        while autoPlant do
+            local myFarm = GetMyFarm()
+            if myFarm then
+                local canPlants = {}
+                -- Collect all "Can_Plant" parts inside your farm only
+                for _, descendant in pairs(myFarm:GetDescendants()) do -- Changed to GetDescendants for robustness
+                    if descendant.Name == "Can_Plant" and descendant:IsA("Part") then
+                        table.insert(canPlants, descendant)
+                    end
+                end
+                if #canPlants == 0 then
+                    task.wait(1)
+                    continue
+                end
+
+                -- Try to spawn seed in a random "Can_Plant" part with spacing checks
+                local tries = 0
+                local maxTries = 30
+                local plantedThisCycle = false
+
+                while tries < maxTries and not plantedThisCycle do
+                    tries = tries + 1
+                    local baseCan = canPlants[math.random(1, #canPlants)]
+                    local spawnPos = getRandomOffsetPosition(baseCan.Position)
+
+                    if isPositionFarFromOthers(spawnPos, 6) then
+                        fireServer_Plant(spawnPos, cropName)
+                        table.insert(plantedPositions, spawnPos)
+                        plantedThisCycle = true
+                    else
+                        task.wait(0.1) -- small wait before next try
+                    end
+                end
+                task.wait(1) -- Delay between planting attempts
+            else
+                task.wait(2) -- Wait and retry if farm not found
+            end
+        end
+    end)
+end
+
+---
+### Farm UI Elements
+---
+Tabs.FarmTab:Section({Title = "Sheckles Control", Icon = "dollar-sign"})
+
+Tabs.FarmTab:Input({
+    Title = "Set Sheckles Amount",
+    Placeholder = "Enter amount of Sheckles", -- Corrected from PlaceholderText
+    Value = "",
+    Callback = function(Text)
+        local amount = tonumber(Text)
+        if amount then
+            inputAmount = amount
+            WindUI:Notify({
+                Title = "Amount Stored!",
+                Content = "Click the button below to apply.",
+                Duration = 3,
+                Icon = "check-circle",
+            })
+        else
+            WindUI:Notify({
+                Title = "Invalid Input",
+                Content = "Please enter a valid number!",
+                Duration = 4,
+                Icon = "alert-triangle",
+            })
+        end
+    end,
+})
+
+Tabs.FarmTab:Button({
+    Title = "Apply Sheckles Amount",
+    Callback = function()
+        if inputAmount == nil then
+            WindUI:Notify({
+                Title = "No Amount Entered",
+                Content = "Please enter a value in the textbox first.",
+                Duration = 4,
+                Icon = "info",
+            })
+            return
+        end
+        -- Directly set the Sheckles value. A persistent update would require a different approach.
+        local player = game.Players.LocalPlayer
+        local leaderstats = player:FindFirstChild("leaderstats")
+        if leaderstats then
+            local sheckles = leaderstats:FindFirstChild("Sheckles")
+            if sheckles then
+                sheckles.Value = inputAmount
+                WindUI:Notify({
+                    Title = "Sheckles Updated!",
+                    Content = "Sheckles set to " .. tostring(inputAmount),
+                    Duration = 4,
+                    Icon = "dollar-sign"
+                })
+            else
+                 WindUI:Notify({
+                    Title = "Error",
+                    Content = "Sheckles leaderstat not found!",
+                    Duration = 4,
+                    Icon = "x-circle",
+                })
+            end
+        else
+            WindUI:Notify({
+                Title = "Error",
+                Content = "Leaderstats not found for player!",
+                Duration = 4,
+                Icon = "x-circle",
+            })
+        end
+    end,
+})
+
+Tabs.FarmTab:Section({Title = "Automation", Icon = "robot"})
+
+-- Dropdown for selecting seeds
+Tabs.FarmTab:Dropdown({
+    Title = "Select Seeds to Plant",
+    Values = {
+        "Carrot Seed", "Strawberry Seed", "Blueberry Seed", "Orange Tulip Seed", "Tomato Seed", "Corn Seed",
+        "Daffodil Seed", "Watermelon Seed", "Pumpkin Seed", "Apple Seed", "Bamboo Seed", "Coconut Seed",
+        "Cactus Seed", "Dragon Fruit Seed", "Mango Seed", "Grape Seed", "Mushroom Seed", "Pepper Seed",
+        "Cacao Seed", "Beanstalk Seed"
+    },
+    Value = currentSeedOption,
+    Multi = false,
+    AllowNone = false,
+    Callback = function(Options)
+        currentSeedOption = Options
+        if autoPlant then
+            local cropName = currentSeedOption:gsub(" Seed", "")
+            startAutoPlanting(cropName)
+        end
+    end,
+})
+
+-- Auto Plant Toggle
+Tabs.FarmTab:Toggle({
+    Title = "Auto Plant",
+    Value = false,
+    Callback = function(val)
+        autoPlant = val
+        if autoPlant then
+            local cropName = currentSeedOption:gsub(" Seed", "")
+            startAutoPlanting(cropName)
+        else
+            if plantTask then
+                task.cancel(plantTask)
+                plantTask = nil
+            end
+        end
+    end,
+})
+
+-- Auto Harvest Toggle
+Tabs.FarmTab:Toggle({
+    Title = "Auto Harvest",
+    Value = false,
+    Callback = function(val)
+        SetAutoHarvest(val)
+    end,
+})
+
+Tabs.FarmTab:Toggle({
+    Title = "Enable Auto-Sell",
+    Value = false,
+    Callback = function(val)
+        AutoSell = val
+    end
+})
+
+Tabs.FarmTab:Slider({
+    Title = "Fruits To Sell",
+    Value = {Min = 1, Max = 199, Default = SellThreshold},
+    Step = 1,
+    Desc = "Threshold for auto-selling fruits",
+    Callback = function(val)
+        SellThreshold = val
+    end
+})
+
+
+---
+--- ## 👁Visual Tab (Adapted from Rayfield)
+---
+local seedToSpawn = ""
+local typedPetName = ""
+
+Tabs.VisualTab:Section({Title = "🌱 Seed Spawner 🌱", Icon = "leaf"})
+
+Tabs.VisualTab:Input({
+    Title = "Enter Seed Name",
+    Placeholder = "e.g., Carrot",
+    Value = "",
+    Callback = function(seedName)
+        seedToSpawn = seedName
+        WindUI:Notify({
+            Title = "Seed Set",
+            Content = "Ready to spawn: " .. seedName,
+            Duration = 3,
+            Icon = "check"
+        })
+    end,
+})
+
+Tabs.VisualTab:Button({
+    Title = "🌾 Spawn Seed",
+    Callback = function()
+        if not seedToSpawn or seedToSpawn == "" then
+            WindUI:Notify({
+                Title = "Input Missing",
+                Content = "Please enter a seed name.",
+                Duration = 3,
+                Icon = "alert-triangle"
+            })
+            return
+        end
+
+        if not SeedModels then
+            WindUI:Notify({Title = "Missing Models", Content = "Seed_Models folder not found in ReplicatedStorage!", Duration = 3, Icon = "x-circle"})
+            return
+        end
+
+        local seedPart = SeedModels:FindFirstChild(seedToSpawn)
+        if not seedPart then
+            WindUI:Notify({
+                Title = "Invalid Seed",
+                Content = "'" .. seedToSpawn .. "' not found in Seed_Models. (Case sensitive?)",
+                Duration = 3,
+                Icon = "x-circle"
+            })
+            return
+        end
+
+        local fakeTool = Instance.new("Tool")
+        fakeTool.Name = seedToSpawn .. " Seed [x1]"
+        fakeTool.RequiresHandle = true
+        fakeTool.Parent = backpack -- Parent to backpack initially
+
+        local handle = seedPart:Clone()
+        handle.Name = "Handle"
+        handle.Size = handle.Size * 1.5 -- Optional: make it larger
+        handle.Parent = fakeTool -- Parent the handle to the tool
+
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid:EquipTool(fakeTool) -- Equip the tool
+            WindUI:Notify({
+                Title = "Success",
+                Content = "You are now holding: " .. fakeTool.Name,
+                Duration = 3,
+                Icon = "check-circle"
+            })
+        else
+            WindUI:Notify({
+                Title = "Error",
+                Content = "No Humanoid found in character to equip tool.",
+                Duration = 3,
+                Icon = "x-circle",
+            })
+        end
+    end
+})
+
+Tabs.VisualTab:Paragraph({
+    Title = "📌 Instructions",
+    Desc = "Type a valid seed name (e.g., 'Carrot') and click 'Spawn Seed' to dupe it. (Case sensitive!)"
+})
+
+Tabs.VisualTab:Section({Title = "🐶 Pet Spawner 🐶", Icon = "paw"})
+
+Tabs.VisualTab:Input({
+    Title = "Enter Pet Name To Spawn",
+    Placeholder = "e.g., Red Fox",
+    Value = "",
+    Callback = function(text)
+        typedPetName = text
+    end,
+})
+
+Tabs.VisualTab:Button({
+    Title = "Spawn Pet",
+    Callback = function()
+        if not typedPetName or typedPetName == "" then
+            WindUI:Notify({
+                Title = "Invalid Input",
+                Content = "Please enter a pet name!",
+                Duration = 3,
+                Icon = "alert-triangle",
+            })
+            return
+        end
+
+        if not PetAssets then
+            WindUI:Notify({
+                Title = "Error",
+                Content = "PetAssets folder not found in ReplicatedStorage.Assets.Models!",
+                Duration = 4,
+                Icon = "x-circle",
+            })
+            return
+        end
+
+        local petModel = PetAssets:FindFirstChild(typedPetName)
+        if not petModel or not petModel:IsA("Model") then
+            WindUI:Notify({
+                Title = "Pet Not Found",
+                Content = "No pet with name '" .. typedPetName .. "' found! (Case sensitive?)",
+                Duration = 4,
+                Icon = "x-circle",
+            })
+            return
+        end
+
+        local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if not humanoid then
+            WindUI:Notify({
+                Title = "Error",
+                Content = "No Humanoid found in character.",
+                Duration = 3,
+                Icon = "x-circle",
+            })
+            return
+        end
+
+        local petClone = petModel:Clone()
+        local primaryPart = petClone.PrimaryPart or petClone:FindFirstChildWhichIsA("BasePart") -- Check for PrimaryPart or any BasePart
+        if not primaryPart then
+            WindUI:Notify({
+                Title = "Spawn Failed",
+                Content = "Pet model has no PrimaryPart or BasePart! Cannot attach to tool.",
+                Duration = 4,
+                Icon = "x-circle",
+            })
+            petClone:Destroy() -- Clean up
+            return
+        end
+
+        primaryPart.Name = "Handle" -- Renamed for tool
+        primaryPart.Anchored = false
+        primaryPart.CanCollide = false
+
+        local petTool = Instance.new("Tool")
+        petTool.Name = typedPetName .. " Pet [x1]"
+        petTool.RequiresHandle = true
+        petTool.Parent = backpack
+
+        -- Ensure all parts of the cloned pet model are parented to the tool
+        -- This avoids issues where only the PrimaryPart/Handle is moved
+        for _, obj in ipairs(petClone:GetChildren()) do
+            obj.Parent = petTool -- Move all parts to the tool
+        end
+
+        -- Equip the pet tool
+        humanoid:EquipTool(petTool)
+
+        WindUI:Notify({
+            Title = "Pet Spawned",
+            Content = "Pet '" .. typedPetName .. "' spawned in backpack and equipped!",
+            Duration = 3,
+            Icon = "check-circle",
+        })
+    end,
+})
+
+Tabs.VisualTab:Paragraph({
+    Title = "📌 Instructions",
+    Desc = "Type a valid Pet name (e.g., 'Red Fox') and click 'Spawn Pet' to spawn and equip it. (Case sensitive!)"
+})
+
+
+---
+--- ## Configuration and Theme Management
+---
+local HttpService = game:GetService("HttpService")
+
+local folderPath = "WindUI"
+makefolder(folderPath)
+
+local function SaveFile(fileName, data)
+    local filePath = folderPath .. "/" .. fileName .. ".json"
+    local jsonData = HttpService:JSONEncode(data)
+    writefile(filePath, jsonData)
+end
+
+local function LoadFile(fileName)
+    local filePath = folderPath .. "/" .. fileName .. ".json"
+    if isfile(filePath) then
+        local jsonData = readfile(filePath)
+        return HttpService:JSONDecode(jsonData)
+    end
+end
+
+local function ListFiles()
+    local files = {}
+    for _, file in ipairs(listfiles(folderPath)) do
+        local fileName = file:match("([^/]+)%.json$")
+        if fileName then
+            table.insert(files, fileName)
+        end
+    end
+    return files
+end
+
+Tabs.WindowTab:Section({ Title = "Window", Icon = "app-window-mac" })
+
+local themeValues = {}
+for name, _ in pairs(WindUI:GetThemes()) do
+    table.insert(themeValues, name)
+end
+
+local themeDropdown = Tabs.WindowTab:Dropdown({
+    Title = "Select Theme",
+    Multi = false,
+    AllowNone = false,
+    Value = nil,
+    Values = themeValues,
+    Callback = function(theme)
+        WindUI:SetTheme(theme)
+    end
+})
+themeDropdown:Select(WindUI:GetCurrentTheme())
+
+local ToggleTransparency = Tabs.WindowTab:Toggle({
+    Title = "Toggle Window Transparency",
+    Callback = function(e)
+        Window:ToggleTransparency(e)
+    end,
+    Value = WindUI:GetTransparency()
+})
+
+Tabs.WindowTab:Section({ Title = "Save" })
+
+local fileNameInput = ""
+Tabs.WindowTab:Input({
+    Title = "Write File Name",
+    Placeholder = "Enter file name",
+    Callback = function(text)
+        fileNameInput = text
+    end
+})
+
+Tabs.WindowTab:Button({
+    Title = "Save File",
+    Callback = function()
+        if fileNameInput ~= "" then
+            SaveFile(fileNameInput, { Transparent = WindUI:GetTransparency(), Theme = WindUI:GetCurrentTheme() })
+        end
+    end
+})
+
+Tabs.WindowTab:Section({ Title = "Load" })
+
+local filesDropdown
+local files = ListFiles()
+
+filesDropdown = Tabs.WindowTab:Dropdown({
+    Title = "Select File",
+    Multi = false,
+    AllowNone = true,
+    Values = files,
+    Callback = function(selectedFile)
+        fileNameInput = selectedFile
+    end
+})
+
+Tabs.WindowTab:Button({
+    Title = "Load File",
+    Callback = function()
+        if fileNameInput ~= "" then
+            local data = LoadFile(fileNameInput)
+            if data then
+                WindUI:Notify({
+                    Title = "File Loaded",
+                    Content = "Loaded data: " .. HttpService:JSONEncode(data),
+                    Duration = 5,
+                })
+                if data.Transparent then
+                    Window:ToggleTransparency(data.Transparent)
+                    ToggleTransparency:SetValue(data.Transparent)
+                end
+                if data.Theme then WindUI:SetTheme(data.Theme) end
+            end
+        end
+    end
+})
+
+Tabs.WindowTab:Button({
+    Title = "Overwrite File",
+    Callback = function()
+        if fileNameInput ~= "" then
+            SaveFile(fileNameInput, { Transparent = WindUI:GetTransparency(), Theme = WindUI:GetCurrentTheme() })
+        end
+    end
+})
+
+Tabs.WindowTab:Button({
+    Title = "Refresh List",
+    Callback = function()
+        filesDropdown:Refresh(ListFiles())
+    end
+})
+
+local currentThemeName = WindUI:GetCurrentTheme()
+local themes = WindUI:GetThemes()
+
+local ThemeAccent = themes[currentThemeName].Accent
+local ThemeOutline = themes[currentThemeName].Outline
+local ThemeText = themes[currentThemeName].Text
+local ThemePlaceholderText = themes[currentThemeName].Placeholder
+
+function updateTheme()
+    WindUI:AddTheme({
+        Name = currentThemeName,
+        Accent = ThemeAccent,
+        Outline = ThemeOutline,
+        Text = ThemeText,
+        Placeholder = ThemePlaceholderText
+    })
+    WindUI:SetTheme(currentThemeName)
+end
+
+local CreateInput = Tabs.CreateThemeTab:Input({
+    Title = "Theme Name",
+    Value = currentThemeName,
+    Callback = function(name)
+        currentThemeName = name
+    end
+})
+
+Tabs.CreateThemeTab:Colorpicker({
+    Title = "Background Color",
+    Default = Color3.fromHex(ThemeAccent),
+    Callback = function(color)
+        ThemeAccent = color:ToHex()
+    end
+})
+
+Tabs.CreateThemeTab:Colorpicker({
+    Title = "Outline Color",
+    Default = Color3.fromHex(ThemeOutline),
+    Callback = function(color)
+        ThemeOutline = color:ToHex()
+    end
+})
+
+Tabs.CreateThemeTab:Colorpicker({
+    Title = "Text Color",
+    Default = Color3.fromHex(ThemeText),
+    Callback = function(color)
+        ThemeText = color:ToHex()
+    end
+})
+
+Tabs.CreateThemeTab:Colorpicker({
+    Title = "Placeholder Text Color",
+    Default = Color3.fromHex(ThemePlaceholderText),
+    Callback = function(color)
+        ThemePlaceholderText = color:ToHex()
+    end
+})
+
+Tabs.CreateThemeTab:Button({
+    Title = "Update Theme",
+    Callback = function()
+        updateTheme()
+    end
+})
+
+local InviteCode = "ApbHXtAwU2"
+local DiscordAPI = "https://discord.com/api/v10/invites/" .. InviteCode .. "?with_counts=true&with_expiration=true"
+
+local Response = game:GetService("HttpService"):JSONDecode(WindUI.Creator.Request({
+    Url = DiscordAPI,
+    Method = "GET",
+    Headers = {
+        ["User-Agent"] = "RobloxBot/1.0",
+        ["Accept"] = "application/json"
+    }
+}).Body)
+
+if Response and Response.guild then
+    local DiscordInfo = Tabs.Tests:Paragraph({
+        Title = Response.guild.name,
+        Desc =
+            ' <font color="#52525b">•</font> Member Count : ' .. tostring(Response.approximate_member_count) ..
+            '\n <font color="#16a34a">•</font> Online Count : ' .. tostring(Response.approximate_presence_count)
+        ,
+        Image = "https://cdn.discordapp.com/icons/" .. Response.guild.id .. "/" .. Response.guild.icon .. ".png?size=1024",
+        ImageSize = 42,
+    })
+
+    Tabs.Tests:Button({
+        Title = "Update Info",
+        Callback = function()
+            local UpdatedResponse = game:GetService("HttpService"):JSONDecode(WindUI.Creator.Request({
+                Url = DiscordAPI,
+                Method = "GET",
+            }).Body)
+
+            if UpdatedResponse and UpdatedResponse and UpdatedResponse.guild then
+                DiscordInfo:SetDesc(
+                    ' <font color="#52525b">•</font> Member Count : ' .. tostring(UpdatedResponse.approximate_member_count) ..
+                    '\n <font color="#16a34a">•</font> Online Count : ' .. tostring(UpdatedResponse.approximate_presence_count)
+                )
+            end
+        end
+    })
+else
+    Tabs.Tests:Paragraph({
+        Title = "Error when receiving information about the Discord server",
+        Desc = game:GetService("HttpService"):JSONEncode(Response),
+        Image = "triangle-alert",
+        ImageSize = 26,
+        Color = "Red",
+    })
+end
+
+local function parseJSON(luau_table, indent, level, visited)
+    indent = indent or 2
+    level = level or 0
+    visited = visited or {}
+
+    local currentIndent = string.rep(" ", level * indent)
+    local nextIndent = string.rep(" ", (level + 1) * indent)
+
+    if luau_table == nil then
+        return "null"
+    end
+
+    local dataType = type(luau_table)
+
+    if dataType == "table" then
+        if visited[luau_table] then
+            return "\"[Circular Reference]\""
+        end
+
+        visited[luau_table] = true
+
+        local isArray = true
+        local maxIndex = 0
+
+        for k, _ in pairs(luau_table) do
+            if type(k) == "number" and k > maxIndex then
+                maxIndex = k
+            end
+            if type(k) ~= "number" or k <= 0 or math.floor(k) ~= k then
+                isArray = false
+                break
+            end
+        end
+
+        local count = 0
+        for _ in pairs(luau_table) do
+            count = count + 1
+        end
+        if count ~= maxIndex and isArray then
+            isArray = false
+        end
+
+        if count == 0 then
+            return "{}"
+        end
+
+        if isArray then
+            if count == 0 then
+                return "[]"
+            end
+
+            local result = "[\n"
+
+            for i = 1, maxIndex do
+                result = result .. nextIndent .. parseJSON(luau_table[i], indent, level + 1, visited)
+                if i < maxIndex then
+                    result = result .. ","
+                end
+                result = result .. "\n"
+            end
+
+            result = result .. currentIndent .. "]"
+            return result
+        else
+            local result = "{\n"
+            local first = true
+
+            local keys = {}
+            for k in pairs(luau_table) do
+                table.insert(keys, k)
+            end
+            table.sort(keys, function(a, b)
+                if type(a) == type(b) then
+                    return tostring(a) < tostring(b)
+                else
+                    return type(a) < type(b)
+                end
+            end)
+
+            for _, k in ipairs(keys) do
+                local v = luau_table[k]
+                if not first then
+                    result = result .. ",\n"
+                else
+                    first = false
+                end
+
+                if type(k) == "string" then
+                    result = result .. nextIndent .. "\"" .. k .. "\": "
+                else
+                    result = result .. nextIndent .. "\"" .. tostring(k) .. "\": "
+                end
+
+                result = result .. parseJSON(v, indent, level + 1, visited)
+            end
+
+            result = result .. "\n" .. currentIndent .. "}"
+            return result
+        end
+    elseif dataType == "string" then
+        local escaped = luau_table:gsub("\\", "\\\\")
+        escaped = escaped:gsub("\"", "\\\"")
+        escaped = escaped:gsub("\n", "\\n")
+        escaped = escaped:gsub("\r", "\\r")
+        escaped = escaped:gsub("\t", "\\t")
+
+        return "\"" .. escaped .. "\""
+    elseif dataType == "number" then
+        return tostring(luau_table)
+    elseif dataType == "boolean" then
+        return luau_table and "true" or "false"
+    elseif dataType == "function" then
+        return "\"function\""
+    else
+        return "\"" .. dataType .. "\""
+    end
+end
+
+local function tableToClipboard(luau_table, indent)
+    indent = indent or 4
+    local jsonString = parseJSON(luau_table, indent)
+    setclipboard(jsonString)
+    return jsonString
+end
+
+Tabs.Tests:Section({
+    Title = "Get WindUI JSON"
+})
+
+Tabs.Tests:Button({
+    Title = "Get WindUI JSON",
+    Callback = function()
+        tableToClipboard(WindUI)
+    end
+})
+
+---
+--- ## Config Manager
+---
+local ToggleElement = Tabs.ConfigTab:Toggle({
+    Title = "Toggle",
+    Desc = "Config Test Toggle",
+    Callback = function(v) print("Toggle Changed: " .. tostring(v)) end
+})
+
+local SliderElement = Tabs.ConfigTab:Slider({
+    Title = "Slider",
+    Desc = "Config Test Slider",
+    Value = {
+        Min = 0,
+        Max = 100,
+        Default = 50,
+    },
+    Callback = function(v) print("Slider Changed: " .. v) end
+})
+
+local KeybindElement = Tabs.ConfigTab:Keybind({
+    Title = "Keybind",
+    Desc = "Config Test Keybind",
+    Value = "F",
+    Callback = function(v) print("Keybind Changed/Clicked: " .. v) end
+})
+
+local DropdownElement = Tabs.ConfigTab:Dropdown({
+    Title = "Dropdown",
+    Desc = "Config Test Dropdown",
+    Values = { "Test 1", "Test 2" },
+    Value = "Test 1",
+    Callback = function(v) print("Dropdown Changed: " .. HttpService:JSONEncode(v)) end
+})
+
+local InputElement = Tabs.ConfigTab:Input({
+    Title = "Input",
+    Desc = "Config Test Input",
+    Value = "Test",
+    Placeholder = "Enter text.......",
+    Callback = function(v) print("Input Changed: " .. v) end
+})
+
+local ColorpickerElement = Tabs.ConfigTab:Colorpicker({
+    Title = "Colorpicker",
+    Desc = "Config Test Colorpicker",
+    Default = Color3.fromHex("#315dff"),
+    Transparency = 0, -- Transparency enabled
+    Callback = function(c,t) print("Colorpicker Changed: " .. c:ToHex() .. "\nTransparency: " .. t) end
+})
+
+-- 1. Load ConfigManager
+local ConfigManager = Window.ConfigManager
+
+-- 2. Create Config File
+local myConfig = ConfigManager:CreateConfig("myConfig")
+
+-- 3. Register elements
+myConfig:Register( "toggleNameExample",    ToggleElement   )
+myConfig:Register( "sliderNameExample",    SliderElement   )
+myConfig:Register( "keybindNameExample",   KeybindElement  )
+myConfig:Register( "dropdownNameExample",  DropdownElement )
+myConfig:Register( "inputNameExample",     InputElement    )
+myConfig:Register( "ColorpickerNameExample", ColorpickerElement )
+
+Tabs.ConfigTab:Button({
+    Title = "Save",
+    Desc = "Saves elements to config",
+    Callback = function()
+        myConfig:Save()
+    end
+})
+
+Tabs.ConfigTab:Button({
+    Title = "Load",
+    Desc = "Loads elements from config",
+    Callback = function()
+        myConfig:Load()
+    end
+})
+
+-- OnClose function
+Window:OnClose(function()
+    print("UI closed.")
+end)
